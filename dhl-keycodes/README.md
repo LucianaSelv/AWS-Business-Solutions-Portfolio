@@ -3,9 +3,9 @@
 ## 🚀 **Project Overview**
 This project aims to address manual errors in international shipment documentation, which often cause delays, incorrect billing, and customs clearance problems. In global courier operations, lost paperwork and mismanaged documentation lead to customs delays, billing errors, and lengthy shipment amendments.
 
-By leveraging **AWS services** and automating document handling and keycode validation, this solution streamlines operations, reduces human error, and ensures seamless customs processing.
+By leveraging **AWS services** and automating document handling and account keycode validation, this solution streamlines operations, reduces human error, and ensures seamless customs processing.
 
-The solution mimics an integration between the **Metafour SaaS platform** (courier service provider) and **DHL's system** using **API Gateway** and **Lambda** for customs account keycode validation. Lambda validates keycodes, processes documents, and stores them securely in **S3**.
+The solution mimics integrating the **Metafour SaaS platform** (courier service provider) and **DHL's system** using **API Gateway** and **Lambda** for customs account keycode validation. Lambda validates keycodes, processes documents, and stores them securely in **S3**.
 
 This solution significantly reduces operational inefficiencies and improves customer satisfaction by automating documentation processes.
 

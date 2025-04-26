@@ -50,11 +50,13 @@ The architecture integrates multiple AWS services:
 - **EventBridge** automates any necessary follow-up actions (e.g., notifying a team member or triggering further workflows).
 - **S3 Versioning** ensures all documents are versioned, providing traceability and improved error management.
 
+## Architecture Diagram
+[dhl-keycodes/DHL Diagram.drawio.svg]  
+  
 ## 🛠 **Deployment Instructions**
 
 ### Prerequisites:
 - An **AWS account** (can use the Free Tier)
-- **Terraform** installed for deploying the infrastructure
 - **AWS CLI** configured on your machine
 
 ### Step-by-Step Deployment:
@@ -66,10 +68,6 @@ The architecture integrates multiple AWS services:
 - Higher team productivity due to automation.
 - Improved client satisfaction with reduced shipment delays.
 
-## 💡 **Future Enhancements**
-- Expand integration with additional courier services (FedEx, UPS, etc.).
-- Introduce AI-powered anomaly detection for customs clearance risks.
-- Implement automated invoice generation linked to keycode validation.
   
 1. **Clone the Repository**:
    ```bash

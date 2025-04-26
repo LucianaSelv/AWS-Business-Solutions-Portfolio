@@ -51,7 +51,7 @@ The architecture integrates multiple AWS services:
 - **S3 Versioning** ensures all documents are versioned, providing traceability and improved error management.
 
 ## Architecture Diagram
-[dhl-keycodes/DHL Diagram.drawio.svg]  
+![Architecture Diagram]()
   
 ## 🛠 **Deployment Instructions**
 

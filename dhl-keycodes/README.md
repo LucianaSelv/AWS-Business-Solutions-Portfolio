@@ -15,15 +15,8 @@ This solution significantly reduces operational inefficiencies and improves cust
 - **Manual errors** in international shipment documentation caused delays and incorrect billing.
 - **Customs clearance errors** due to incorrect deferment accounts and missing paperwork.
 - **Frequent amendments** to Entry Docs caused high operational workload and delays.
-- **78% of emails** were customs clearance requests, flooding team inboxes.
+- **Customs Clearance emails** were customs clearance requests, flooding team inboxes.
 - **Transit time** for shipments averaged 8.7 days.
-
-### Solution Implemented:
-- **API Gateway** + **Lambda**: Automated document validation and keycode processing.
-- **S3**: Secure storage for commercial invoices and shipping documents.
-- **DynamoDB**: Validates keycodes against master account records.
-- **CloudWatch**: Monitors and tracks API calls, errors, and system performance.
-- **EventBridge**: Triggers workflows based on keycode entries for further automation.
 
 ### After Implementation:
 - **78% reduction** in customs clearance request emails.
@@ -37,39 +30,38 @@ This solution significantly reduces operational inefficiencies and improves cust
 |---------------------|------------------------------------------------------------------------|
 | **API Gateway**      | Exposes a REST API for keycode validation and document submission       |
 | **Lambda**           | Processes keycodes, validates them, triggers automation                 |
-| **S3**               | Stores commercial invoices and shipping documents securely             |
+| **S3**               | Stores keycodes, commercial invoices, and shipping documents securely with encryption |
 | **EventBridge**      | Automates event-driven workflows based on event triggers (keycode entry) |
-| **DynamoDB**         | Stores keycodes for validation                                         |
 | **CloudWatch**       | Logs API calls, errors and system performance metrics                       |
-| **IAM Roles**        | Grants the necessary permissions for Lambda to interact with S3 and DynamoDB |
+| **CloudTrail**       | Provides audit logs for compliance and security tracking      |
+| **SQS (DLQ)**        | Dead Letter Queue for handling validation failures      |
+| **SNS**              | Sends notifications for critical alerts       |
+| **Cognito**          | Manages user authentication for secure API access      |
+| **IAM Roles**        | Grants least privilege permissions for Lambda to interact with S3 and other services |
 
 ## 🔑 **Solution Architecture**
-The architecture integrates multiple AWS services:
-- **API Gateway** simulates the Metafour-to-DHL call by receiving HTTP requests from a mock API (simulating Metafour's system).
-- **Lambda** processes the keycode, validates it using **DynamoDB**, and uploads necessary documents to **S3**.
+The architecture integrates multiple AWS services, deployed via AWS CloudFormation, leveraging the Free Tier, and adhering to AWS Well-Architected principles:
+- **API Gateway** simulates the Metafour-to-DHL call by receiving HTTP requests from a mock API (simulating Metafour's system), with Cognito handling user authentication.
+- **Lambda** (Validator) retrieves keycodes from **S3**, processes and validates them, then uploads documents to an encrypted **S3** bucket. An **IAM Role** with least privilege ensures secure access to resources.
+- Validation failures are sent to an **SQS Dead Letter Queue (DLQ)** for error handling.
 - **EventBridge** automates any necessary follow-up actions (e.g., notifying a team member or triggering further workflows).
-- **S3 Versioning** ensures all documents are versioned, providing traceability and improved error management.
+- **CloudTrail** provides audit logs, **CloudWatch Logs** monitors system performance, and **CloudWatch Alarms + SNS** send alerts for issues.
 
 ## Architecture Diagram
 ![Architecture Diagram](DHL_Diagram.drawio.svg)
   
-## 🛠 **Deployment Instructions**
+## 🛠 **Deployment Approach**
 
 ### Prerequisites:
 - An **AWS account** (can use the Free Tier)
 - **AWS CLI** configured on your machine
 
-### Step-by-Step Deployment:
+### Deployment Method:
+The solution was deployed using AWS CloudFormation, enabling infrastructure-as-code for consistency and scalability. The deployment leverages the AWS Free Tier to minimise costs and adheres to the AWS Well-Architected Framework for security, reliability, and operational excellence.
 
 ## 📊 Results & Business Impact
 
-- Faster processing of customs documents.
-- Fewer human errors in deferment account assignments.
+- Faster processing of customs clearance and documents.
+- Fewer human errors in deferred account assignments.
 - Higher team productivity due to automation.
 - Improved client satisfaction with reduced shipment delays.
-
-  
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/your-repo/dhl-keycodes.git
-   cd dhl-keycodes

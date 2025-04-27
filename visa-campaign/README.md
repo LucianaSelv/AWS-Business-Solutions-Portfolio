@@ -1,20 +1,37 @@
-# 🚀 Serverless Customer Acquisition Platform for Visa – AWS Free Tier Solution
+# Serverless Customer Acquisition Platform for Visa – AWS Free Tier Solution
 
-## 📚 Context
-Visa and Ricardo Electro collaborated to grow the Visa customer database through a $1.99 Gillette kit promotion. A real-time test leak led to unexpected traffic surges and exposed signup vulnerabilities.
+## 🚀 Project Overview
+This project demonstrates a serverless architecture designed to scale a promotional campaign for Visa and an E-commerce using AWS Free Tier services.
+Visa and E-commerce partnered to grow Visa's customer database and drive activation through a $1.99 Gillette kit promotion. During real-time testing, an affiliate leak led to unexpected traffic surges and exposed signup vulnerabilities.
+It reimagines a real-world case where a high-profile campaign required a **fraud-resistant**, **secure**, **scalable** solution to handle customer data integrity, high traffic, and seamless customer engagement.
 
 ## 🛠️ Business Challenge
-- Massive traffic spike due to early leak.
-- Users able to register multiple times via different emails.
-- Fraud and resale risk without CPF validation.
-- Need for scalable, secure architecture under high demand.
 
-## 🚀 Solution
-Designed a serverless AWS architecture to:
-- Validate signups with CPF as a unique key.
-- Enforce a 1-unit-per-customer limit.
-- Handle unexpected traffic via scalable serverless services.
-- Engage users post-signup with Pinpoint follow-ups.
+### Before Implementation:
+- **High-risk traffic** due to leaked pre-campaign test.
+- **Users bypassing purchase limits** by using multiple emails.
+- **Absence** of strong identity verification mechanisms.
+- **Potential** for legal, financial, and brand reputation risks.
+- **Need for scalable, secure architecture** under high demand.
+
+### 🛡️ My Role and Impact
+- Led crisis management during the campaign leak, collaborating directly with Visa’s head of marketing.
+- Identified root vulnerabilities in the customer registration system.
+- Protected the campaign integrity and ensured positive partner relations through proactive communication.
+- Designed a **serverless AWS architecture** using Free Tier services.
+### Proposed and implemented Solutions:
+ - Validate signups with CPF as a unique user identifier.
+ - Securely collect sensitive user data (name, email, CPF, card) with account authentication.
+ - Enforce a 1-unit-per-customer limit.
+ - Handle unexpected traffic via scalable serverless services.
+ - Monitor metrics and engage customers post-signup.
+
+### 🏆 After Implementation:
+- **41% growth** in Visa/Mastercard customer mailing database.
+- **300% organic traffic** in E-commerce’s organic web traffic.
+- **24% increase** in e-commerce turnover.
+- **5x ROAS** (Return On Ad Spend)achieved.
+- **Full fraud prevention** and secure data handling implemented
 
 ## 🧰 AWS Services Used
 | Service | Purpose |
@@ -32,15 +49,13 @@ Designed a serverless AWS architecture to:
 ## 🏗️ Architecture Diagram
 ![Architecture Diagram](VISA_campaign_architecture_layers.drawio.svg)
 
-## 🏆 Outcomes
-- 📈 41% growth in Visa/Mastercard customer database.
-- 🔥 300% organic traffic lift for Ricardo Electro over 2 months.
-- 🛒 24% e-commerce turnover increase.
-- 💵 5x ROAS (Return On Ad Spend).
-
-
+## 📺 **Walkthrough Video**
 
 ## 📈 Business Impact
 This solution protected the campaign, improved customer activation quality, avoided reselling risks, ensured scalability without infrastructure overhead, and strengthened partnerships with Visa and P&G.
+
+![AWS](https://img.shields.io/badge/AWS-Free%20Tier-orange)
+![Serverless](https://img.shields.io/badge/Architecture-Serverless-brightgreen)
+![Project](https://img.shields.io/badge/Project-Real%20Business%20Case-blue)
 
 ---

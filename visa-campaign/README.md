@@ -1,9 +1,11 @@
-# Serverless Customer Acquisition Platform for Visa – AWS Free Tier Solution
+# Serverless Customer Acquisition Platform for Visa
 
 ## 🚀 Project Overview
-This project demonstrates a serverless architecture designed to scale a promotional campaign for Visa and an E-commerce using AWS Free Tier services.
+This project demonstrates a serverless architecture designed on **AWS Free Tier** services to scale a promotional campaign for Visa and an E-commerce.
+
 Visa and E-commerce partnered to grow Visa's customer database and drive activation through a $1.99 Gillette kit promotion. During real-time testing, an affiliate leak led to unexpected traffic surges and exposed signup vulnerabilities.
-It reimagines a real-world case where a high-profile campaign required a **fraud-resistant**, **secure**, **scalable** solution to handle customer data integrity, high traffic, and seamless customer engagement.
+
+It reimagines a real-world case where a high-profile campaign required a **fraud-resistant**, **secure**, and **scalable** solution to maintain customer data integrity, handle high traffic, and ensure seamless customer engagement.
 
 ## 🛠️ Business Challenge
 

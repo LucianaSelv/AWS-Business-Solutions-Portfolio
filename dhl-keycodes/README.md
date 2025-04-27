@@ -47,7 +47,7 @@ The architecture integrates multiple AWS services, deployed via AWS CloudFormati
 - **EventBridge** automates any necessary follow-up actions (e.g., notifying a team member or triggering further workflows).
 - **CloudTrail** provides audit logs, **CloudWatch Logs** monitors system performance, and **CloudWatch Alarms + SNS** send alerts for issues.
 
-## 📷 **Architecture Diagram**
+## 🏗️ **Architecture Diagram**
 ![Architecture Diagram](DHL_Diagram.drawio.svg)
   
 ## 🛠 **Deployment Approach**

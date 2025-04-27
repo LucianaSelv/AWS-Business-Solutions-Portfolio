@@ -70,3 +70,12 @@ The solution was deployed using AWS CloudFormation, enabling infrastructure-as-c
 - Fewer human errors in deferred account assignments.
 - Higher team productivity due to automation.
 - Improved client satisfaction with reduced shipment delays.
+
+## 💡 Cost Optimization
+- Fully serverless: No EC2 management.
+- Maximum AWS Free Tier usage during early deployment.
+
+
+![AWS](https://img.shields.io/badge/AWS-Free%20Tier-orange)
+![Serverless](https://img.shields.io/badge/Architecture-Serverless-brightgreen)
+![Project](https://img.shields.io/badge/Project-Real%20Business%20Case-blue)

@@ -1,13 +1,11 @@
 # DHL Keycodes - Optimising Courier Operations with AWS
 
 ## 🚀 **Project Overview**
-This project aims to address manual errors in international shipment documentation, which often cause delays, incorrect billing, and customs clearance problems. In global courier operations, lost paperwork and mismanaged documentation lead to customs delays, billing errors, and lengthy shipment amendments.
+This project tackles manual errors in international shipment documentation, which cause delays, incorrect billing, and customs issues. In global courier operations, lost paperwork and mismanaged documentation lead to customs processing delays and lengthy shipment amendments.
 
-By leveraging **AWS services** and automating document handling and account keycode validation, this solution streamlines operations, reduces human error, and ensures seamless customs processing.
+By leveraging **AWS services** to automate document handling and account keycode validation, this solution streamlines operations, reduces human error, and ensures efficient customs processing.
 
 The solution mimics integrating the **Metafour SaaS platform** (courier service provider) and **DHL's system** using **API Gateway** and **Lambda** for customs account keycode validation. Lambda validates keycodes, processes documents, and stores them securely in **S3**.
-
-This solution significantly reduces operational inefficiencies and improves customer satisfaction by automating documentation processes.
 
 ## 🛠️ **Business Challenge**
 
@@ -19,6 +17,14 @@ This solution significantly reduces operational inefficiencies and improves cust
 - **Transit time** for shipments averaged 8.7 days.
 
 ### 🛡️ My Role and Impact
+- Identified recurring customs processing issues.
+- Led the effort with DHL and Metafour to design a keycode validation solution.
+- Ensured compliance and process alignment with the UK Customs Clearance team.
+- Designed a **serverless AWS architecture** using Free Tier services.
+### Proposed and implemented Solutions:
+ - Integrated Metafour with DHL’s system for keycode validation via **API Gateway** and **Lambda**.
+ - Automated account keycode and document storage securely in **S3**.
+ - Enabled DHL to adopt the solution for clients with multiple accounts under the same Importer of Record.
 
 ### 🏆 After Implementation:
 - **78% reduction** in customs clearance request emails.
@@ -74,7 +80,6 @@ The solution was deployed using AWS CloudFormation, enabling infrastructure-as-c
 ## 💡 Cost Optimization
 - Fully serverless: No EC2 management.
 - Maximum AWS Free Tier usage during early deployment.
-
 
 ![AWS](https://img.shields.io/badge/AWS-Free%20Tier-orange)
 ![Serverless](https://img.shields.io/badge/Architecture-Serverless-brightgreen)

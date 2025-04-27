@@ -16,7 +16,7 @@ Designed a serverless AWS architecture to:
 - Handle unexpected traffic via scalable serverless services.
 - Engage users post-signup with Pinpoint follow-ups.
 
-## 🖼️ Architecture Diagram
+## 🏗️ Architecture Diagram
 *(Insert your architecture PNG here.)*
 
 ## 🏆 Outcomes

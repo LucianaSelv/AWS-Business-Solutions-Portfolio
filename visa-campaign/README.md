@@ -48,6 +48,22 @@ It reimagines a real-world case where a high-profile campaign required a **fraud
 | **AWS Lambda** | Serverless compute functions (registration, token generation, e-commerce validation) |
 | **Amazon DynamoDB** | Serverless NoSQL database storing CPF and registered card data |
 
+## 🔑 Solution Architecture
+The Visa campaign architecture integrates multiple AWS services inside a secure **VPC**, fully leveraging the Free Tier and adhering to AWS Well-Architected principles:
+
+-- **Amazon Pinpoint** drives user acquisition and engagement through targeted SMS and email campaigns.
+- **Amazon CloudFront** accelerates portal access, delivering static assets from **Amazon S3**.
+- **AWS WAF** secures the portal against malicious traffic and common web exploits.
+- **Amazon Cognito** manages user registration, authentication, and secure collection of CPF, card, and personal data.
+- **Amazon API Gateway** exposes backend APIs for registration and token issuance.
+- **AWS Lambda** handles business logic:
+  - **Registration Lambda**: Validates CPF and card details.
+  - **Token Lambda**: Generates secure tokens post-registration.
+  - **E-commerce Lambda**: Verifies tokens and enforces the **1-unit-per-customer** purchase limit.
+- **Amazon DynamoDB** stores user records and purchase history for validation.
+- **Amazon CloudWatch** captures logs, metrics, and monitors application health.
+- Backend services operate privately inside the **AWS VPC**, ensuring secure and isolated communication.
+  
 ## 🏗️ Architecture Diagram
 ![Architecture Diagram](VISA_campaign_architecture_layers.drawio.svg)
 

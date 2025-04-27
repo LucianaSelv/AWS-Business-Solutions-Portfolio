@@ -32,7 +32,7 @@ It reimagines a real-world case where a high-profile campaign required a **fraud
 - **41% growth** in Visa/Mastercard customer mailing database.
 - **300% organic traffic** in E-commerce’s organic web traffic.
 - **24% increase** in e-commerce turnover.
-- **5x ROAS** (Return On Ad Spend)achieved.
+- **5x ROAS** (Return On Ad Spend) achieved.
 - **Full fraud prevention** and secure data handling implemented
 
 ## 🧰 AWS Services Used

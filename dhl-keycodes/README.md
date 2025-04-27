@@ -9,7 +9,7 @@ The solution mimics integrating the **Metafour SaaS platform** (courier service 
 
 This solution significantly reduces operational inefficiencies and improves customer satisfaction by automating documentation processes.
 
-## 💼 **Business Problem**
+## 🛠️ **Business Challenge**
 
 ### Before Implementation:
 - **Manual errors** in international shipment documentation caused delays and incorrect billing.
@@ -18,14 +18,16 @@ This solution significantly reduces operational inefficiencies and improves cust
 - **Customs Clearance emails** were customs clearance requests, flooding team inboxes.
 - **Transit time** for shipments averaged 8.7 days.
 
-### After Implementation:
+### 🛡️ My Role and Impact
+
+### 🏆 After Implementation:
 - **78% reduction** in customs clearance request emails.
 - Amendment rate dropped to **2%** of total shipments.
 - **Transit time** reduced from 8.7 days to 4.3 days.
 - Increased **team productivity** and improved **client satisfaction**.
 
 
-## 🔧 **AWS Services Used**
+## 🧰 **AWS Services Used**
 | **Service**         | **Purpose**                                                            |
 |---------------------|------------------------------------------------------------------------|
 | **API Gateway**      | Exposes a REST API for keycode validation and document submission       |

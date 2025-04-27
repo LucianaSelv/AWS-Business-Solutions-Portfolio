@@ -15,8 +15,8 @@ It reimagines a real-world case where a high-profile campaign required a **fraud
 - **Need for scalable, secure architecture** under high demand.
 
 ### 🛡️ My Role and Impact
-- Led crisis management during the campaign leak, collaborating directly with Visa’s head of marketing.
 - Identified root vulnerabilities in the customer registration system.
+- Led crisis management during the campaign leak, collaborating directly with Visa’s head of marketing.
 - Protected the campaign integrity and ensured positive partner relations through proactive communication.
 - Designed a **serverless AWS architecture** using Free Tier services.
 ### Proposed and implemented Solutions:

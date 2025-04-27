@@ -54,6 +54,11 @@ It reimagines a real-world case where a high-profile campaign required a **fraud
 ## 📈 Business Impact
 This solution protected the campaign, improved customer activation quality, avoided reselling risks, ensured scalability without infrastructure overhead, and strengthened partnerships with Visa and P&G.
 
+## 💡 Cost Optimization
+- Fully serverless: No EC2 management.
+- Maximum AWS Free Tier usage during early deployment.
+- On-demand scaling minimised fixed operational costs.
+  
 ![AWS](https://img.shields.io/badge/AWS-Free%20Tier-orange)
 ![Serverless](https://img.shields.io/badge/Architecture-Serverless-brightgreen)
 ![Project](https://img.shields.io/badge/Project-Real%20Business%20Case-blue)

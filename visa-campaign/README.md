@@ -17,7 +17,7 @@ Designed a serverless AWS architecture to:
 - Engage users post-signup with Pinpoint follow-ups.
 
 ## 🏗️ Architecture Diagram
-(VISA_campaign_architecture_layers.drawio.svg)
+![Architecture Diagram](VISA_campaign_architecture_layers.drawio.svg)
 
 ## 🏆 Outcomes
 - 📈 41% growth in Visa/Mastercard customer database.

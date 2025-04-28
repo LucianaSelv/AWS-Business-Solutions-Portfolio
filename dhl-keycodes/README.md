@@ -10,11 +10,11 @@ The solution mimics integrating the **Metafour SaaS platform** (courier service 
 ## 🛠️ **Business Challenge**
 
 ### Before Implementation:
-- **Manual errors** in international shipment documentation caused delays and incorrect billing.
-- **Customs clearance errors** due to incorrect deferment accounts and missing paperwork.
-- **Frequent amendments** to Entry Docs caused high operational workload and delays.
-- **Customs Clearance emails** were customs clearance requests, flooding team inboxes.
-- **Transit time** for shipments averaged 8.7 days.
+- **Manual errors** in shipment documentation caused delays and incorrect billing.
+- **Customs clearance mistakes** from missing paperwork and incorrect deferment accounts.
+- **High amendment rates** to Entry Docs increased operational workload and delays.
+- **Flooded inboxes** with frequent customs clearance request emails.
+- **Prolonged transit time** averaging 8.7 days per shipment.
 
 ### 🛡️ My Role and Impact
 - Identified recurring customs processing issues.
@@ -22,9 +22,9 @@ The solution mimics integrating the **Metafour SaaS platform** (courier service 
 - Ensured compliance and process alignment with the UK Customs Clearance team.
 - Designed a **serverless AWS architecture** using Free Tier services.
 ### Proposed and implemented Solutions:
- - Integrated Metafour with DHL’s system for keycode validation via **API Gateway** and **Lambda**.
- - Automated account keycode and document storage securely in **S3**.
- - Enabled DHL to adopt the solution for clients with multiple accounts under the same Importer of Record.
+ - Integrate Metafour with DHL’s system for keycode validation via **API Gateway** and **Lambda**.
+ - Automate account keycode and document storage securely in **S3**.
+ - Enable DHL to adopt the solution for clients with multiple accounts under the same Importer of Record.
 
 ### 🏆 After Implementation:
 - **78% reduction** in customs clearance request emails.

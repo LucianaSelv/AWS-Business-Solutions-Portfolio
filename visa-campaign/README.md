@@ -65,7 +65,7 @@ The Visa campaign architecture integrates multiple AWS services inside a secure 
 - Backend services operate privately inside the **AWS VPC**, ensuring secure and isolated communication.
   
 ## 🏗️ Architecture Diagram
-![Architecture Diagram](VISA_campaign_architecture_layers.drawio.svg)
+![Architecture Diagram](VISA_campaign_architecture_layers..svg)
 
 ## 📺 **Walkthrough Video**
 

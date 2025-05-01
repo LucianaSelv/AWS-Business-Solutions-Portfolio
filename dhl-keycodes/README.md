@@ -56,7 +56,7 @@ The architecture integrates multiple AWS services, deployed via AWS CloudFormati
 - **CloudTrail** provides audit logs, **CloudWatch Logs** monitors system performance, and **CloudWatch Alarms + SNS** send alerts for issues.
 
 ## 🏗️ **Architecture Diagram**
-![Architecture Diagram](DHL_Diagram.drawio.svg)
+![Architecture Diagram](architecture/DHL_Diagram.drawio.svg)
   
 ## 🛠 **Deployment Approach**
 

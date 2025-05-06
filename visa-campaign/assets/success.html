@@ -1,1 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Success - E-commerce</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        /* Header Banner Styles */
+        .header-banner {
+            background-color: #1A237E;
+            color: #fff;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .header-banner img {
+            max-width: 200px; /* Enlarged */
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .banner-text {
+            max-width: 600px;
+            text-align: left;
+        }
+
+        .banner-text h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .banner-text p {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .banner-text button {
+            background: #FFC107;
+            color: #1A237E;
+            font-weight: bold;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .banner-text button:hover {
+            background: #e6b800;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .header-banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .banner-text {
+                text-align: center;
+            }
+
+            .header-banner img {
+                max-width: 160px;
+            }
+        }
+
+        .limited-offer-badge {
+            display: inline-block;
+            background: red;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 0.9em;
+            font-weight: bold;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .token-note {
+            font-size: 1em;
+            color: #fff;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #28a745;
+        }
+
+        .token {
+            font-weight: bold;
+            color: #1A237E;
+        }
+
+        /* Products Grid */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product-card h3 {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+
+        .product-card p {
+            color: #555;
+        }
+
+        .product-card button {
+            background: #FFC107;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .product-card:nth-child(odd) button {
+            background: #D32F2F;
+        }
+
+        .product-card:nth-child(3n) button {
+            background: #388E3C;
+        }
+
+        .product-card button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <div class="header-banner">
+        <img src="https://visa-campaign-891612576649-eu-west-2.s3.eu-west-2.amazonaws.com/e-commerce-website/Kit+Gillette-165131-600x600" alt="Gillette Kit">
+        <div class="banner-text">
+            <div class="limited-offer-badge">LIMITED OFFER</div>
+            <h2>Welcome, Visa Client!</h2>
+            <p>Get your exclusive Gillette Kit now for just <strong>$1.99</strong> – only until stock lasts.</p>
+            <p class="token-note">Use your registration token below to claim the offer.</p>
+            <button>Shop Now</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Registration Successful!</h1>
+        <p>Use this token to claim your exclusive offer: <span class="token" id="token"></span></p>
+        <h2>Explore Our Products</h2>
+        <div class="products">
+            <div class="product-card">
+                <img src="https://visa-campaign-891612576649-eu-west-2.s3.eu-west-2.amazonaws.com/e-commerce-website/Smartphone-2048px-6959" alt="Smartphone">
+                <h3>Latest Smartphone</h3>
+                <p>$299.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://visa-campaign-891612576649-eu-west-2.s3.eu-west-2.amazonaws.com/e-commerce-website/T-shirt" alt="T-Shirt">
+                <h3>Stylish T-Shirt</h3>
+                <p>$19.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://visa-campaign-891612576649-eu-west-2.s3.eu-west-2.amazonaws.com/e-commerce-website/Coffee+Maker" alt="Coffee Maker">
+                <h3>Premium Coffee Maker</h3>
+                <p>$89.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://visa-campaign-891612576649-eu-west-2.s3.eu-west-2.amazonaws.com/e-commerce-website/Headphones" alt="Headphones">
+                <h3>Wireless Headphones</h3>
+                <p>$59.99</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="https://visa-campaign-891612576649-eu-west-2.s3.eu-west-2.amazonaws.com/e-commerce-website/Lamp" alt="Lamp">
+                <h3>Modern Desk Lamp</h3>
+                <p>$39.99</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Extract token from URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        document.getElementById('token').textContent = token || 'Not provided';
+    </script>
+
+</body>
+</html>
 

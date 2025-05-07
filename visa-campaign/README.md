@@ -67,6 +67,12 @@ The Visa campaign architecture integrates multiple AWS services inside a secure 
 ## 🏗️ Architecture Diagram
 ![Architecture Diagram](architecture/VISA_campaign_architecture_layers..svg)
 
+## 🛠 **Deployment Method**
+The solution was deployed using AWS CloudFormation, enabling infrastructure-as-code for consistency and scalability. The deployment leverages the AWS Free Tier to minimise costs and adheres to the AWS Well-Architected Framework for security, reliability, and operational excellence.
+
+### User Journey:
+
+
 ## 📺 **Walkthrough Video**
 
 ## 📈 Business Impact

@@ -66,6 +66,13 @@
             transform: scale(1.05);
         }
 
+        .banner-text button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         @media (max-width: 768px) {
             .header-banner {
                 flex-direction: column;
@@ -165,6 +172,97 @@
         .product-card button:hover {
             opacity: 0.9;
         }
+
+        /* Shopping Cart Section */
+        .cart-section {
+            background: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .checkout-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .continue-shopping {
+            background: #1A237E;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .order-now {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Notification styles */
+        .notification {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success-notification {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-notification {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Token Status */
+        .token-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        
+        .token-status .status-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .token-valid {
+            color: #28a745;
+        }
+        
+        .token-invalid {
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
@@ -176,15 +274,43 @@
             <div class="limited-offer-badge">LIMITED OFFER</div>
             <h2>Welcome, Visa Client!</h2>
             <p>Get your exclusive Gillette Kit now for just <strong>$1.99</strong>.<br>Only while stock lasts.</p>
-            <p class="token-note">Use your registration token below to claim the offer.</p>
-            <button>Shop Now</button>
+            <p class="token-note">Use your registration token to claim the offer.</p>
+            <button id="shopNowBtn">Shop Now</button>
         </div>
+    </div>
+
+    <!-- Notification Area -->
+    <div id="successNotification" class="notification success-notification">
+        Gillette Kit has been added to your cart successfully!
+    </div>
+    <div id="errorNotification" class="notification error-notification">
+        Error message will appear here.
     </div>
 
     <!-- Main Content -->
     <div class="container">
         <h1>Registration Successful!</h1>
-        <p>Use this token to claim your exclusive offer: <span class="token" id="token"></span></p>
+        
+        <!-- Token Status Section -->
+        <div id="tokenStatus" class="token-status">
+            <!-- Token status will be shown here -->
+        </div>
+        
+        <!-- Shopping Cart Section -->
+        <div id="cartSection" class="cart-section">
+            <h2>Your Cart</h2>
+            <div id="cartItems">
+                <!-- Cart items will be displayed here -->
+            </div>
+            <div class="cart-total">
+                Total: $<span id="cartTotal">0.00</span>
+            </div>
+            <div class="checkout-buttons">
+                <button class="continue-shopping" id="continueShoppingBtn">Continue Shopping</button>
+                <button class="order-now" id="orderNowBtn">Order Now</button>
+            </div>
+        </div>
+
         <h2>Explore Our Products</h2>
         <div class="products">
             <div class="product-card">
@@ -221,12 +347,215 @@
     </div>
 
     <script>
+        // Initialize variables
+        const shopNowBtn = document.getElementById('shopNowBtn');
+        const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+        const orderNowBtn = document.getElementById('orderNowBtn');
+        const cartSection = document.getElementById('cartSection');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const successNotification = document.getElementById('successNotification');
+        const errorNotification = document.getElementById('errorNotification');
+        const tokenStatus = document.getElementById('tokenStatus');
+        
         // Extract token from URL query parameter
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
-        document.getElementById('token').textContent = token || 'Not provided';
+        
+        let kitAdded = false;
+        
+        // Handle showing notifications
+        const showNotification = (element, message = null) => {
+            // Hide all notifications first
+            successNotification.style.display = 'none';
+            errorNotification.style.display = 'none';
+            
+            // If message is provided, update the content
+            if (message) {
+                element.textContent = message;
+            }
+            
+            // Show the requested notification
+            element.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 5000);
+        };
+        
+        // Update token status display
+        const updateTokenStatus = (isValid, message) => {
+            if (isValid) {
+                tokenStatus.innerHTML = `
+                    <span class="status-icon token-valid">✓</span>
+                    <span>Your token <strong>${token}</strong> is valid. Click "Shop Now" to claim your exclusive offer.</span>
+                `;
+                tokenStatus.className = 'token-status token-valid';
+            } else {
+                tokenStatus.innerHTML = `
+                    <span class="status-icon token-invalid">✗</span>
+                    <span>${message}</span>
+                `;
+                tokenStatus.className = 'token-status token-invalid';
+                shopNowBtn.disabled = true;
+            }
+        };
+        
+        // Fallback token validation (for when API calls fail due to CORS)
+        const fallbackValidateToken = (token) => {
+            if (!token) {
+                return { valid: false, message: 'No token provided. Please check your registration email.' };
+            }
+            
+            // Check if token has already been redeemed (using localStorage for demo)
+            const redeemedTokens = localStorage.getItem('redeemedTokens') ? 
+                JSON.parse(localStorage.getItem('redeemedTokens')) : [];
+            
+            if (redeemedTokens.includes(token)) {
+                return { valid: false, message: 'This token has already been redeemed.' };
+            }
+            
+            // Simple validation rule
+            if (token.length < 4) {
+                return { valid: false, message: 'Invalid token format.' };
+            }
+            
+            return { valid: true };
+        };
+        
+        // Add Gillette Kit to cart
+        const addGilletteKitToCart = () => {
+            if (kitAdded) {
+                showNotification(errorNotification, '⚠️ Only 1 Gillette Kit allowed per user.');
+                return;
+            }
+            
+            // Check if token exists
+            if (!token) {
+                showNotification(errorNotification, 'No token provided. Please check your registration email.');
+                return;
+            }
+            
+            // Try API endpoint first, fall back to client-side validation if API fails
+            try {
+                fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    processTokenValidation(data.success, data.error);
+                })
+                .catch(error => {
+                    console.warn('API validation failed, using fallback:', error);
+                    const fallbackResult = fallbackValidateToken(token);
+                    processTokenValidation(fallbackResult.valid, fallbackResult.message);
+                });
+            } catch (error) {
+                console.warn('API call error, using fallback:', error);
+                const fallbackResult = fallbackValidateToken(token);
+                processTokenValidation(fallbackResult.valid, fallbackResult.message);
+            }
+        };
+        
+        // Process token validation result (whether from API or fallback)
+        const processTokenValidation = (isValid, errorMessage) => {
+            if (isValid) {
+                // Disable the shop now button
+                shopNowBtn.disabled = true;
+                shopNowBtn.textContent = 'Added to Cart';
+                
+                // Create cart item
+                const cartItemHTML = `
+                    <div class="cart-item">
+                        <div>
+                            <strong>Gillette Kit (Special Offer)</strong>
+                            <p>Quantity: 1</p>
+                        </div>
+                        <div>$1.99</div>
+                    </div>
+                `;
+                
+                // Update cart
+                cartItems.innerHTML = cartItemHTML;
+                cartTotal.textContent = '1.99';
+                cartSection.style.display = 'block';
+                
+                // Set kit as added
+                kitAdded = true;
+                
+                // Mark token as redeemed in localStorage
+                const redeemedTokens = localStorage.getItem('redeemedTokens') ? 
+                    JSON.parse(localStorage.getItem('redeemedTokens')) : [];
+                redeemedTokens.push(token);
+                localStorage.setItem('redeemedTokens', JSON.stringify(redeemedTokens));
+                
+                // Show success notification
+                showNotification(successNotification, '✔️ Gillette Kit has been added to your cart!');
+                
+                // Scroll to cart section
+                cartSection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                // Show error notification
+                showNotification(errorNotification, '❌ ' + (errorMessage || 'Token validation failed.'));
+                updateTokenStatus(false, errorMessage || 'Token validation failed.');
+            }
+        };
+        
+        // Event Listeners
+        shopNowBtn.addEventListener('click', () => {
+            addGilletteKitToCart();
+        });
+        
+        continueShoppingBtn.addEventListener('click', () => {
+            // Scroll to the products section
+            document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        orderNowBtn.addEventListener('click', () => {
+            alert('✅ Purchase confirmed! Your Gillette Kit will be delivered soon.');
+            // In a real implementation, this would redirect to a checkout page
+        });
+        
+        // Initialize page on load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initial token check
+            if (!token) {
+                updateTokenStatus(false, 'No token provided. Please check your registration email.');
+            } else {
+                // Try API validation first, fallback to client-side
+                try {
+                    fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        updateTokenStatus(data.success, data.error || '');
+                    })
+                    .catch(error => {
+                        console.warn('API validation failed on load, using fallback:', error);
+                        const fallbackResult = fallbackValidateToken(token);
+                        updateTokenStatus(fallbackResult.valid, fallbackResult.message);
+                    });
+                } catch (error) {
+                    console.warn('API call error on load, using fallback:', error);
+                    const fallbackResult = fallbackValidateToken(token);
+                    updateTokenStatus(fallbackResult.valid, fallbackResult.message);
+                }
+            }
+            
+            // Setup product buttons
+            document.querySelectorAll('.product-card button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    alert('🛒 Product added to cart!');
+                });
+            });
+        });
     </script>
 
 </body>
 </html>
-

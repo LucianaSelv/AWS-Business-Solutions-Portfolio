@@ -26,7 +26,7 @@
         }
 
         .header-banner img {
-            max-width: 200px; /* Enlarged */
+            max-width: 200px;
             height: auto;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -172,75 +172,6 @@
         .product-card button:hover {
             opacity: 0.9;
         }
-
-        /* Shopping Cart Section */
-        .cart-section {
-            background: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            margin-top: 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: none;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .cart-total {
-            text-align: right;
-            margin-top: 20px;
-            font-size: 1.2em;
-        }
-
-        .checkout-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .continue-shopping {
-            background: #1A237E;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .order-now {
-            background: #28a745;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        /* Notification styles */
-        .notification {
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            display: none;
-        }
-
-        .success-notification {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error-notification {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
     </style>
 </head>
 <body>
@@ -251,40 +182,16 @@
         <div class="banner-text">
             <div class="limited-offer-badge">LIMITED OFFER</div>
             <h2>Welcome, Visa Client!</h2>
-            <p>Get your exclusive Gillette Kit now for just <strong>$1.99</strong>   –   only until stock lasts.</p>
+            <p>Get your exclusive Gillette Kit now for just <strong>$1.99</strong>.<br>Only while stock lasts.</p>
             <p class="token-note">Use your registration token below to claim the offer.</p>
             <button id="shopNowBtn">Shop Now</button>
         </div>
-    </div>
-
-    <!-- Notification Area -->
-    <div id="successNotification" class="notification success-notification">
-        Gillette Kit has been added to your cart successfully!
-    </div>
-    <div id="errorNotification" class="notification error-notification">
-        Error message will appear here.
     </div>
 
     <!-- Main Content -->
     <div class="container">
         <h1>Registration Successful!</h1>
         <p>Use this token to claim your exclusive offer: <span class="token" id="token"></span></p>
-        
-        <!-- Shopping Cart Section -->
-        <div id="cartSection" class="cart-section">
-            <h2>Your Cart</h2>
-            <div id="cartItems">
-                <!-- Cart items will be displayed here -->
-            </div>
-            <div class="cart-total">
-                Total: $<span id="cartTotal">0.00</span>
-            </div>
-            <div class="checkout-buttons">
-                <button class="continue-shopping" id="continueShoppingBtn">Continue Shopping</button>
-                <button class="order-now" id="orderNowBtn">Order Now</button>
-            </div>
-        </div>
-
         <h2>Explore Our Products</h2>
         <div class="products">
             <div class="product-card">
@@ -320,124 +227,89 @@
         </div>
     </div>
 
+    <!-- Shopping Cart Section (hidden by default) -->
+    <div id="cartSection" class="container" style="display: none;">
+        <h2>Your Cart</h2>
+        <div id="cartItems"></div>
+        <div class="cart-total">
+            Total: $<span id="cartTotal">0.00</span>
+        </div>
+    </div>
+
     <script>
-       <script>
-    <script>
-    // Initialize variables
-    window.addEventListener('DOMContentLoaded', () => {
-    const shopNowBtn = document.getElementById('shopNowBtn');
-    const continueShoppingBtn = document.getElementById('continueShoppingBtn');
-    const orderNowBtn = document.getElementById('orderNowBtn');
-    const cartSection = document.getElementById('cartSection');
-    const cartItems = document.getElementById('cartItems');
-    const cartTotal = document.getElementById('cartTotal');
-    const successNotification = document.getElementById('successNotification');
-    const errorNotification = document.getElementById('errorNotification');
-    let kitAdded = false;
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Extract token from URL query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const tokenElement = document.getElementById('token');
+            if (tokenElement) {
+                tokenElement.textContent = token || 'Not provided';
+                console.log('Token set to:', token || 'Not provided');
+            } else {
+                console.error('Token element not found');
+            }
 
-    // Debug element references
-    console.log('shopNowBtn:', shopNowBtn);
-    console.log('continueShoppingBtn:', continueShoppingBtn);
-    console.log('orderNowBtn:', orderNowBtn);
+            // Get DOM elements
+            const shopNowBtn = document.getElementById('shopNowBtn');
+            const cartSection = document.getElementById('cartSection');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
 
-    // Token assignment
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    const tokenElement = document.getElementById('token');
-    if (tokenElement) {
-        tokenElement.textContent = token || 'Not provided';
-        console.log('Token set to:', token || 'Not provided');
-    } else {
-        console.error('Token element not found');
-    }
+            // Debug element references
+            console.log('shopNowBtn:', shopNowBtn);
+            console.log('cartSection:', cartSection);
+            console.log('cartItems:', cartItems);
+            console.log('cartTotal:', cartTotal);
 
-    // Handle showing notifications
-    const showNotification = (element, message = null) => {
-        successNotification.style.display = 'none';
-        errorNotification.style.display = 'none';
-        if (message) {
-            element.textContent = message;
-        }
-        element.style.display = 'block';
-        setTimeout(() => {
-            element.style.display = 'none';
-        }, 5000);
-    };
+            // Track if Gillette Kit is added
+            let kitAdded = false;
 
-    // Add Gillette Kit to cart
-    const addGilletteKitToCart = () => {
-        if (kitAdded) {
-            showNotification(errorNotification, '⚠️ Only 1 Gillette Kit allowed per user.');
-            return;
-        }
-        if (!token) {
-            showNotification(errorNotification, 'Token is missing. Please check your registration email.');
-            return;
-        }
-        shopNowBtn.disabled = true;
-        shopNowBtn.textContent = 'Added to Cart';
-        const cartItemHTML = `
-            <div class="cart-item">
-                <div>
-                    <strong>Gillette Kit (Special Offer)</strong>
-                    <p>Quantity: 1</p>
-                </div>
-                <div>$1.99</div>
-            </div>
-        `;
-        cartItems.innerHTML = cartItemHTML;
-        cartTotal.textContent = '1.99';
-        cartSection.style.display = 'block';
-        kitAdded = true;
-        showNotification(successNotification, '✔️ 1 Gillette Kit has been added to your cart.');
-        cartSection.scrollIntoView({ behavior: 'smooth' });
-    };
+            // Function to show notifications (simple alert for now)
+            const showNotification = (message) => {
+                alert(message);
+            };
 
-    // Event Listeners
-    if (shopNowBtn) {
-        shopNowBtn.addEventListener('click', () => {
-            addGilletteKitToCart();
+            // Function to add Gillette Kit to cart
+            const addGilletteKitToCart = () => {
+                if (kitAdded) {
+                    showNotification('⚠️ Only 1 Gillette Kit allowed per user.');
+                    return;
+                }
+                if (!token) {
+                    showNotification('Token is missing. Please check your registration email.');
+                    return;
+                }
+
+                // Add Gillette Kit to cart
+                const cartItemHTML = `
+                    <div class="cart-item">
+                        <div>
+                            <strong>Gillette Kit (Special Offer)</strong>
+                            <p>Quantity: 1</p>
+                        </div>
+                        <div>$1.99</div>
+                    </div>
+                `;
+                cartItems.innerHTML = cartItemHTML;
+                cartTotal.textContent = '1.99';
+                cartSection.style.display = 'block';
+                kitAdded = true;
+                shopNowBtn.disabled = true;
+                shopNowBtn.textContent = 'Added to Cart';
+                showNotification('✔️ 1 Gillette Kit has been added to your cart.');
+                cartSection.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            // Add event listener to Shop Now button
+            if (shopNowBtn) {
+                shopNowBtn.addEventListener('click', addGilletteKitToCart);
+            } else {
+                console.error('Shop Now button not found');
+            }
         });
-    } else {
-        console.error('shopNowBtn element not found');
-    }
-    if (continueShoppingBtn) {
-        continueShoppingBtn.addEventListener('click', () => {
-            document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
-        });
-    } else {
-        console.error('continueShoppingBtn element not found');
-    }
-    if (orderNowBtn) {
-        orderNowBtn.addEventListener('click', () => {
-            alert('✅ Purchase confirmed! Your Gillette Kit will be delivered soon.');
-        });
-    } else {
-        console.error('orderNowBtn element not found');
-    }
+    </script>
 
-    // Check token and validate on page load
-    if (!token) {
-        showNotification(errorNotification, 'Token is missing. Please check your registration email.');
-        shopNowBtn.disabled = true;
-        return;
-    }
-    fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            showNotification(successNotification, '✔️ Token verified! Click "Shop Now" to claim your exclusive Gillette Kit.');
-        } else {
-            showNotification(errorNotification, '❌ Token invalid or already used: ' + data.error);
-            shopNowBtn.disabled = true;
-        }
-    })
-    .catch(error => {
-        showNotification(errorNotification, 'Error verifying token. Please try again later.');
-        console.error('Error:', error);
-    });
-});
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93c1a93a593dc002',t:'MTc0NjYzMDgwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>

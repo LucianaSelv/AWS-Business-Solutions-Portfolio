@@ -241,28 +241,6 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        
-        /* Token Status */
-        .token-status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-            font-size: 1.1em;
-        }
-        
-        .token-status .status-icon {
-            margin-right: 10px;
-            font-size: 1.5em;
-        }
-        
-        .token-valid {
-            color: #28a745;
-        }
-        
-        .token-invalid {
-            color: #dc3545;
-        }
     </style>
 </head>
 <body>
@@ -273,8 +251,8 @@
         <div class="banner-text">
             <div class="limited-offer-badge">LIMITED OFFER</div>
             <h2>Welcome, Visa Client!</h2>
-            <p>Get your exclusive Gillette Kit now for just <strong>$1.99</strong>.<br>Only while stock lasts.</p>
-            <p class="token-note">Use your registration token to claim the offer.</p>
+            <p>Get your exclusive Gillette Kit now for just <strong>$1.99</strong>   –   only until stock lasts.</p>
+            <p class="token-note">Use your registration token below to claim the offer.</p>
             <button id="shopNowBtn">Shop Now</button>
         </div>
     </div>
@@ -290,11 +268,7 @@
     <!-- Main Content -->
     <div class="container">
         <h1>Registration Successful!</h1>
-        
-        <!-- Token Status Section -->
-        <div id="tokenStatus" class="token-status">
-            <!-- Token status will be shown here -->
-        </div>
+        <p>Use this token to claim your exclusive offer: <span class="token" id="token"></span></p>
         
         <!-- Shopping Cart Section -->
         <div id="cartSection" class="cart-section">
@@ -356,11 +330,11 @@
         const cartTotal = document.getElementById('cartTotal');
         const successNotification = document.getElementById('successNotification');
         const errorNotification = document.getElementById('errorNotification');
-        const tokenStatus = document.getElementById('tokenStatus');
         
         // Extract token from URL query parameter
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
+        document.getElementById('token').textContent = token || 'Not provided';
         
         let kitAdded = false;
         
@@ -384,46 +358,6 @@
             }, 5000);
         };
         
-        // Update token status display
-        const updateTokenStatus = (isValid, message) => {
-            if (isValid) {
-                tokenStatus.innerHTML = `
-                    <span class="status-icon token-valid">✓</span>
-                    <span>Your token <strong>${token}</strong> is valid. Click "Shop Now" to claim your exclusive offer.</span>
-                `;
-                tokenStatus.className = 'token-status token-valid';
-            } else {
-                tokenStatus.innerHTML = `
-                    <span class="status-icon token-invalid">✗</span>
-                    <span>${message}</span>
-                `;
-                tokenStatus.className = 'token-status token-invalid';
-                shopNowBtn.disabled = true;
-            }
-        };
-        
-        // Fallback token validation (for when API calls fail due to CORS)
-        const fallbackValidateToken = (token) => {
-            if (!token) {
-                return { valid: false, message: 'No token provided. Please check your registration email.' };
-            }
-            
-            // Check if token has already been redeemed (using localStorage for demo)
-            const redeemedTokens = localStorage.getItem('redeemedTokens') ? 
-                JSON.parse(localStorage.getItem('redeemedTokens')) : [];
-            
-            if (redeemedTokens.includes(token)) {
-                return { valid: false, message: 'This token has already been redeemed.' };
-            }
-            
-            // Simple validation rule
-            if (token.length < 4) {
-                return { valid: false, message: 'Invalid token format.' };
-            }
-            
-            return { valid: true };
-        };
-        
         // Add Gillette Kit to cart
         const addGilletteKitToCart = () => {
             if (kitAdded) {
@@ -433,75 +367,57 @@
             
             // Check if token exists
             if (!token) {
-                showNotification(errorNotification, 'No token provided. Please check your registration email.');
+                showNotification(errorNotification, 'Token is missing. Please check your registration email.');
                 return;
             }
             
-            // Try API endpoint first, fall back to client-side validation if API fails
-            try {
-                fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    processTokenValidation(data.success, data.error);
-                })
-                .catch(error => {
-                    console.warn('API validation failed, using fallback:', error);
-                    const fallbackResult = fallbackValidateToken(token);
-                    processTokenValidation(fallbackResult.valid, fallbackResult.message);
-                });
-            } catch (error) {
-                console.warn('API call error, using fallback:', error);
-                const fallbackResult = fallbackValidateToken(token);
-                processTokenValidation(fallbackResult.valid, fallbackResult.message);
-            }
-        };
-        
-        // Process token validation result (whether from API or fallback)
-        const processTokenValidation = (isValid, errorMessage) => {
-            if (isValid) {
-                // Disable the shop now button
-                shopNowBtn.disabled = true;
-                shopNowBtn.textContent = 'Added to Cart';
-                
-                // Create cart item
-                const cartItemHTML = `
-                    <div class="cart-item">
-                        <div>
-                            <strong>Gillette Kit (Special Offer)</strong>
-                            <p>Quantity: 1</p>
+            // Use the API endpoint to validate the token
+            fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Disable the shop now button
+                    shopNowBtn.disabled = true;
+                    shopNowBtn.textContent = 'Added to Cart';
+                    
+                    // Create cart item
+                    const cartItemHTML = `
+                        <div class="cart-item">
+                            <div>
+                                <strong>Gillette Kit (Special Offer)</strong>
+                                <p>Quantity: 1</p>
+                            </div>
+                            <div>$1.99</div>
                         </div>
-                        <div>$1.99</div>
-                    </div>
-                `;
-                
-                // Update cart
-                cartItems.innerHTML = cartItemHTML;
-                cartTotal.textContent = '1.99';
-                cartSection.style.display = 'block';
-                
-                // Set kit as added
-                kitAdded = true;
-                
-                // Mark token as redeemed in localStorage
-                const redeemedTokens = localStorage.getItem('redeemedTokens') ? 
-                    JSON.parse(localStorage.getItem('redeemedTokens')) : [];
-                redeemedTokens.push(token);
-                localStorage.setItem('redeemedTokens', JSON.stringify(redeemedTokens));
-                
-                // Show success notification
-                showNotification(successNotification, '✔️ Gillette Kit has been added to your cart!');
-                
-                // Scroll to cart section
-                cartSection.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                // Show error notification
-                showNotification(errorNotification, '❌ ' + (errorMessage || 'Token validation failed.'));
-                updateTokenStatus(false, errorMessage || 'Token validation failed.');
-            }
+                    `;
+                    
+                    // Update cart
+                    cartItems.innerHTML = cartItemHTML;
+                    cartTotal.textContent = '1.99';
+                    cartSection.style.display = 'block';
+                    
+                    // Set kit as added
+                    kitAdded = true;
+                    
+                    // Show success notification
+                    showNotification(successNotification, '✔️ Token verified! 1 Gillette Kit has been added to your cart.');
+                    
+                    // Scroll to cart section
+                    cartSection.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // Show error notification
+                    showNotification(errorNotification, '❌ Token invalid or already used: ' + data.error);
+                    shopNowBtn.disabled = true;
+                }
+            })
+            .catch(error => {
+                showNotification(errorNotification, 'Error verifying token. Please try again later.');
+                console.error('Error:', error);
+            });
         };
         
         // Event Listeners
@@ -519,40 +435,33 @@
             // In a real implementation, this would redirect to a checkout page
         });
         
-        // Initialize page on load
+        // Check token and validate on page load
         window.addEventListener('DOMContentLoaded', () => {
-            // Initial token check
             if (!token) {
-                updateTokenStatus(false, 'No token provided. Please check your registration email.');
-            } else {
-                // Try API validation first, fallback to client-side
-                try {
-                    fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ token })
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        updateTokenStatus(data.success, data.error || '');
-                    })
-                    .catch(error => {
-                        console.warn('API validation failed on load, using fallback:', error);
-                        const fallbackResult = fallbackValidateToken(token);
-                        updateTokenStatus(fallbackResult.valid, fallbackResult.message);
-                    });
-                } catch (error) {
-                    console.warn('API call error on load, using fallback:', error);
-                    const fallbackResult = fallbackValidateToken(token);
-                    updateTokenStatus(fallbackResult.valid, fallbackResult.message);
-                }
+                showNotification(errorNotification, 'Token is missing. Please check your registration email.');
+                shopNowBtn.disabled = true;
+                return;
             }
             
-            // Setup product buttons
-            document.querySelectorAll('.product-card button').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    alert('🛒 Product added to cart!');
-                });
+            // Auto-validate token on page load
+            fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // No need to auto-add the kit, just let the user know the token is valid
+                    showNotification(successNotification, '✔️ Token verified! Click "Shop Now" to claim your exclusive Gillette Kit.');
+                } else {
+                    showNotification(errorNotification, '❌ Token invalid or already used: ' + data.error);
+                    shopNowBtn.disabled = true;
+                }
+            })
+            .catch(error => {
+                showNotification(errorNotification, 'Error verifying token. Please try again later.');
+                console.error('Error:', error);
             });
         });
     </script>

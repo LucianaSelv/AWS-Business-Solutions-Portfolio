@@ -172,6 +172,99 @@
         .product-card button:hover {
             opacity: 0.9;
         }
+
+        /* Shopping Cart Section */
+        .cart-section {
+            background: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .cart-item-quantity button {
+            background: #1A237E;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .cart-item-quantity button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .cart-item-quantity button:hover:not(:disabled) {
+            background: #0d1a66;
+        }
+
+        .cart-total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1A237E;
+        }
+
+        .checkout-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .continue-shopping {
+            background: #1A237E;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .continue-shopping:hover {
+            background: #0d1a66;
+        }
+
+        .order-now {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        .order-now:hover {
+            background: #218838;
+        }
     </style>
 </head>
 <body>
@@ -198,41 +291,45 @@
                 <img src="products image/smartphone.webp" alt="Smartphone">
                 <h3>Latest Smartphone</h3>
                 <p>$299.99</p>
-                <button>Add to Cart</button>
+                <button class="add-to-cart" data-product="Smartphone" data-price="299.99">Add to Cart</button>
             </div>
             <div class="product-card">
                 <img src="products image/t-shirt.jpg" alt="T-Shirt">
                 <h3>Stylish T-Shirt</h3>
                 <p>$19.99</p>
-                <button>Add to Cart</button>
+                <button class="add-to-cart" data-product="T-Shirt" data-price="19.99">Add to Cart</button>
             </div>
             <div class="product-card">
                 <img src="products image/coffee maker.webp" alt="Coffee Maker">
                 <h3>Premium Coffee Maker</h3>
                 <p>$89.99</p>
-                <button>Add to Cart</button>
+                <button class="add-to-cart" data-product="Coffee Maker" data-price="89.99">Add to Cart</button>
             </div>
             <div class="product-card">
                 <img src="products image/headphones.webp" alt="Headphones">
                 <h3>Wireless Headphones</h3>
                 <p>$59.99</p>
-                <button>Add to Cart</button>
+                <button class="add-to-cart" data-product="Headphones" data-price="59.99">Add to Cart</button>
             </div>
             <div class="product-card">
                 <img src="products image/lamp.avif" alt="Lamp">
                 <h3>Modern Desk Lamp</h3>
                 <p>$39.99</p>
-                <button>Add to Cart</button>
+                <button class="add-to-cart" data-product="Lamp" data-price="39.99">Add to Cart</button>
             </div>
         </div>
     </div>
 
-    <!-- Shopping Cart Section (hidden by default) -->
-    <div id="cartSection" class="container" style="display: none;">
+    <!-- Shopping Cart Section -->
+    <div id="cartSection" class="cart-section">
         <h2>Your Cart</h2>
         <div id="cartItems"></div>
         <div class="cart-total">
             Total: $<span id="cartTotal">0.00</span>
+        </div>
+        <div class="checkout-buttons">
+            <button class="continue-shopping" id="continueShoppingBtn">Continue Shopping</button>
+            <button class="order-now" id="orderNowBtn">Order Now</button>
         </div>
     </div>
 
@@ -252,22 +349,75 @@
 
             // Get DOM elements
             const shopNowBtn = document.getElementById('shopNowBtn');
+            const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+            const orderNowBtn = document.getElementById('orderNowBtn');
             const cartSection = document.getElementById('cartSection');
             const cartItems = document.getElementById('cartItems');
             const cartTotal = document.getElementById('cartTotal');
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
 
             // Debug element references
             console.log('shopNowBtn:', shopNowBtn);
+            console.log('continueShoppingBtn:', continueShoppingBtn);
+            console.log('orderNowBtn:', orderNowBtn);
             console.log('cartSection:', cartSection);
             console.log('cartItems:', cartItems);
             console.log('cartTotal:', cartTotal);
+            console.log('addToCartButtons:', addToCartButtons);
 
-            // Track if Gillette Kit is added
+            // Track cart state
+            let cart = [];
             let kitAdded = false;
 
-            // Function to show notifications (simple alert for now)
+            // Function to show notifications
             const showNotification = (message) => {
                 alert(message);
+            };
+
+            // Function to render cart
+            const renderCart = () => {
+                if (cart.length === 0) {
+                    cartSection.style.display = 'none';
+                    return;
+                }
+                cartSection.style.display = 'block';
+                cartItems.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <strong>${item.name}</strong>
+                            <div class="cart-item-quantity">
+                                <button class="decrease-qty" data-index="${index}" ${item.name === 'Gillette Kit (Special Offer)' ? 'disabled' : ''}>−</button>
+                                <span>Quantity: ${item.quantity}</span>
+                                <button class="increase-qty" data-index="${index}" ${item.name === 'Gillette Kit (Special Offer)' ? 'disabled' : ''}>+</button>
+                            </div>
+                        </div>
+                        <div>$${(item.price * item.quantity).toFixed(2)}</div>
+                    </div>
+                `).join('');
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartTotal.textContent = total.toFixed(2);
+                cartSection.scrollIntoView({ behavior: 'smooth' });
+
+                // Add event listeners for quantity buttons
+                document.querySelectorAll('.increase-qty').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const index = parseInt(button.getAttribute('data-index'));
+                        cart[index].quantity += 1;
+                        renderCart();
+                    });
+                });
+
+                document.querySelectorAll('.decrease-qty').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const index = parseInt(button.getAttribute('data-index'));
+                        if (cart[index].quantity > 1) {
+                            cart[index].quantity -= 1;
+                        } else {
+                            cart.splice(index, 1); // Remove item if quantity reaches 0
+                        }
+                        renderCart();
+                    });
+                });
             };
 
             // Function to add Gillette Kit to cart
@@ -281,32 +431,64 @@
                     return;
                 }
 
-                // Add Gillette Kit to cart
-                const cartItemHTML = `
-                    <div class="cart-item">
-                        <div>
-                            <strong>Gillette Kit (Special Offer)</strong>
-                            <p>Quantity: 1</p>
-                        </div>
-                        <div>$1.99</div>
-                    </div>
-                `;
-                cartItems.innerHTML = cartItemHTML;
-                cartTotal.textContent = '1.99';
-                cartSection.style.display = 'block';
+                cart.push({
+                    name: 'Gillette Kit (Special Offer)',
+                    price: 1.99,
+                    quantity: 1
+                });
                 kitAdded = true;
                 shopNowBtn.disabled = true;
                 shopNowBtn.textContent = 'Added to Cart';
                 showNotification('✔️ 1 Gillette Kit has been added to your cart.');
-                cartSection.scrollIntoView({ behavior: 'smooth' });
+                renderCart();
             };
 
-            // Add event listener to Shop Now button
+            // Function to add other products to cart
+            const addProductToCart = (productName, price) => {
+                const existingItem = cart.find(item => item.name === productName);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        name: productName,
+                        price: parseFloat(price),
+                        quantity: 1
+                    });
+                }
+                showNotification(`✔️ ${productName} has been added to your cart.`);
+                renderCart();
+            };
+
+            // Add event listeners
             if (shopNowBtn) {
                 shopNowBtn.addEventListener('click', addGilletteKitToCart);
             } else {
                 console.error('Shop Now button not found');
             }
+
+            if (continueShoppingBtn) {
+                continueShoppingBtn.addEventListener('click', () => {
+                    document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
+                });
+            } else {
+                console.error('Continue Shopping button not found');
+            }
+
+            if (orderNowBtn) {
+                orderNowBtn.addEventListener('click', () => {
+                    showNotification('✅ Purchase confirmed! Your Gillette Kit will be delivered soon.');
+                });
+            } else {
+                console.error('Order Now button not found');
+            }
+
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const productName = button.getAttribute('data-product');
+                    const price = button.getAttribute('data-price');
+                    addProductToCart(productName, price);
+                });
+            });
         });
     </script>
 

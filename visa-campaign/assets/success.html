@@ -321,150 +321,129 @@
     </div>
 
     <script>
-        // Initialize variables
-        const shopNowBtn = document.getElementById('shopNowBtn');
-        const continueShoppingBtn = document.getElementById('continueShoppingBtn');
-        const orderNowBtn = document.getElementById('orderNowBtn');
-        const cartSection = document.getElementById('cartSection');
-        const cartItems = document.getElementById('cartItems');
-        const cartTotal = document.getElementById('cartTotal');
-        const successNotification = document.getElementById('successNotification');
-        const errorNotification = document.getElementById('errorNotification');
+       <script>
+    // Initialize variables
+    const shopNowBtn = document.getElementById('shopNowBtn');
+    const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+    const orderNowBtn = document.getElementById('orderNowBtn');
+    const cartSection = document.getElementById('cartSection');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    const successNotification = document.getElementById('successNotification');
+    const errorNotification = document.getElementById('errorNotification');
+    
+    // Extract token from URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    document.getElementById('token').textContent = token || 'Not provided';
+    
+    let kitAdded = false;
+    
+    // Handle showing notifications
+    const showNotification = (element, message = null) => {
+        // Hide all notifications first
+        successNotification.style.display = 'none';
+        errorNotification.style.display = 'none';
         
-        // Extract token from URL query parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
-        document.getElementById('token').textContent = token || 'Not provided';
+        // If message is provided, update the content
+        if (message) {
+            element.textContent = message;
+        }
         
-        let kitAdded = false;
+        // Show the requested notification
+        element.style.display = 'block';
         
-        // Handle showing notifications
-        const showNotification = (element, message = null) => {
-            // Hide all notifications first
-            successNotification.style.display = 'none';
-            errorNotification.style.display = 'none';
-            
-            // If message is provided, update the content
-            if (message) {
-                element.textContent = message;
-            }
-            
-            // Show the requested notification
-            element.style.display = 'block';
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                element.style.display = 'none';
-            }, 5000);
-        };
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 5000);
+    };
+    
+    // Add Gillette Kit to cart
+    const addGilletteKitToCart = () => {
+        if (kitAdded) {
+            showNotification(errorNotification, '⚠️ Only 1 Gillette Kit allowed per user.');
+            return;
+        }
         
-        // Add Gillette Kit to cart
-        const addGilletteKitToCart = () => {
-            if (kitAdded) {
-                showNotification(errorNotification, '⚠️ Only 1 Gillette Kit allowed per user.');
-                return;
-            }
-            
-            // Check if token exists
-            if (!token) {
-                showNotification(errorNotification, 'Token is missing. Please check your registration email.');
-                return;
-            }
-            
-            // Use the API endpoint to validate the token
-            fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    // Disable the shop now button
-                    shopNowBtn.disabled = true;
-                    shopNowBtn.textContent = 'Added to Cart';
-                    
-                    // Create cart item
-                    const cartItemHTML = `
-                        <div class="cart-item">
-                            <div>
-                                <strong>Gillette Kit (Special Offer)</strong>
-                                <p>Quantity: 1</p>
-                            </div>
-                            <div>$1.99</div>
-                        </div>
-                    `;
-                    
-                    // Update cart
-                    cartItems.innerHTML = cartItemHTML;
-                    cartTotal.textContent = '1.99';
-                    cartSection.style.display = 'block';
-                    
-                    // Set kit as added
-                    kitAdded = true;
-                    
-                    // Show success notification
-                    showNotification(successNotification, '✔️ Token verified! 1 Gillette Kit has been added to your cart.');
-                    
-                    // Scroll to cart section
-                    cartSection.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    // Show error notification
-                    showNotification(errorNotification, '❌ Token invalid or already used: ' + data.error);
-                    shopNowBtn.disabled = true;
-                }
-            })
-            .catch(error => {
-                showNotification(errorNotification, 'Error verifying token. Please try again later.');
-                console.error('Error:', error);
-            });
-        };
+        // Check if token exists (relying on page load validation for actual verification)
+        if (!token) {
+            showNotification(errorNotification, 'Token is missing. Please check your registration email.');
+            return;
+        }
         
-        // Event Listeners
-        shopNowBtn.addEventListener('click', () => {
-            addGilletteKitToCart();
-        });
+        // Since the token was already verified on page load, proceed to add the kit
+        shopNowBtn.disabled = true;
+        shopNowBtn.textContent = 'Added to Cart';
         
-        continueShoppingBtn.addEventListener('click', () => {
-            // Scroll to the products section
-            document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
-        });
+        // Create cart item
+        const cartItemHTML = `
+            <div class="cart-item">
+                <div>
+                    <strong>Gillette Kit (Special Offer)</strong>
+                    <p>Quantity: 1</p>
+                </div>
+                <div>$1.99</div>
+            </div>
+        `;
         
-        orderNowBtn.addEventListener('click', () => {
-            alert('✅ Purchase confirmed! Your Gillette Kit will be delivered soon.');
-            // In a real implementation, this would redirect to a checkout page
-        });
+        // Update cart
+        cartItems.innerHTML = cartItemHTML;
+        cartTotal.textContent = '1.99';
+        cartSection.style.display = 'block';
         
-        // Check token and validate on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            if (!token) {
-                showNotification(errorNotification, 'Token is missing. Please check your registration email.');
+        // Set kit as added
+        kitAdded = true;
+        
+        // Show success notification
+        showNotification(successNotification, '✔️ 1 Gillette Kit has been added to your cart.');
+        
+        // Scroll to cart section
+        cartSection.scrollIntoView({ behavior: 'smooth' });
+    };
+    
+    // Event Listeners
+    shopNowBtn.addEventListener('click', () => {
+        addGilletteKitToCart();
+    });
+    
+    continueShoppingBtn.addEventListener('click', () => {
+        // Scroll to the products section
+        document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    orderNowBtn.addEventListener('click', () => {
+        alert('✅ Purchase confirmed! Your Gillette Kit will be delivered soon.');
+        // In a real implementation, this would redirect to a checkout page
+    });
+    
+    // Check token and validate on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        if (!token) {
+            showNotification(errorNotification, 'Token is missing. Please check your registration email.');
+            shopNowBtn.disabled = true;
+            return;
+        }
+        
+        // Auto-validate token on page load
+        fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // No need to auto-add the kit, just let the user know the token is valid
+                showNotification(successNotification, '✔️ Token verified! Click "Shop Now" to claim your exclusive Gillette Kit.');
+            } else {
+                showNotification(errorNotification, '❌ Token invalid or already used: ' + data.error);
                 shopNowBtn.disabled = true;
-                return;
             }
-            
-            // Auto-validate token on page load
-            fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    // No need to auto-add the kit, just let the user know the token is valid
-                    showNotification(successNotification, '✔️ Token verified! Click "Shop Now" to claim your exclusive Gillette Kit.');
-                } else {
-                    showNotification(errorNotification, '❌ Token invalid or already used: ' + data.error);
-                    shopNowBtn.disabled = true;
-                }
-            })
-            .catch(error => {
-                showNotification(errorNotification, 'Error verifying token. Please try again later.');
-                console.error('Error:', error);
-            });
+        })
+        .catch(error => {
+            showNotification(errorNotification, 'Error verifying token. Please try again later.');
+            console.error('Error:', error);
         });
-    </script>
-
-</body>
-</html>
+    });
+</script>

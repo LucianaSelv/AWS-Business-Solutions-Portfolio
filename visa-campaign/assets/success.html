@@ -10,7 +10,8 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            text-align: center;
+            display: flex;
+            min-height: 100vh;
         }
 
         /* Header Banner Styles */
@@ -18,6 +19,7 @@
             background-color: #1A237E;
             color: #fff;
             padding: 40px 20px;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -106,11 +108,17 @@
             margin-bottom: 20px;
         }
 
-        /* Container Styles */
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            max-width: calc(100% - 300px); /* Adjust for cart width */
+        }
+
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0;
         }
 
         h1 {
@@ -175,12 +183,17 @@
 
         /* Shopping Cart Section */
         .cart-section {
+            width: 300px;
             background: #fff;
             border-radius: 5px;
             padding: 20px;
-            margin-top: 30px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            bottom: 20px;
+            overflow-y: auto;
+            z-index: 1000;
         }
 
         .cart-item {
@@ -265,6 +278,23 @@
         .order-now:hover {
             background: #218838;
         }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .main-content {
+                max-width: 100%;
+            }
+
+            .cart-section {
+                position: static;
+                width: 100%;
+                margin-top: 20px;
+                height: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -282,40 +312,42 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container">
-        <h1>Registration Successful!</h1>
-        <p>Use this token to claim your exclusive offer: <span class="token" id="token"></span></p>
-        <h2>Explore Our Products</h2>
-        <div class="products">
-            <div class="product-card">
-                <img src="products image/smartphone.webp" alt="Smartphone">
-                <h3>Latest Smartphone</h3>
-                <p>$299.99</p>
-                <button class="add-to-cart" data-product="Smartphone" data-price="299.99">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <img src="products image/t-shirt.jpg" alt="T-Shirt">
-                <h3>Stylish T-Shirt</h3>
-                <p>$19.99</p>
-                <button class="add-to-cart" data-product="T-Shirt" data-price="19.99">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <img src="products image/coffee maker.webp" alt="Coffee Maker">
-                <h3>Premium Coffee Maker</h3>
-                <p>$89.99</p>
-                <button class="add-to-cart" data-product="Coffee Maker" data-price="89.99">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <img src="products image/headphones.webp" alt="Headphones">
-                <h3>Wireless Headphones</h3>
-                <p>$59.99</p>
-                <button class="add-to-cart" data-product="Headphones" data-price="59.99">Add to Cart</button>
-            </div>
-            <div class="product-card">
-                <img src="products image/lamp.avif" alt="Lamp">
-                <h3>Modern Desk Lamp</h3>
-                <p>$39.99</p>
-                <button class="add-to-cart" data-product="Lamp" data-price="39.99">Add to Cart</button>
+    <div class="main-content">
+        <div class="container">
+            <h1>Registration Successful!</h1>
+            <p>Use this token to claim your exclusive offer: <span class="token" id="token"></span></p>
+            <h2>Explore Our Products</h2>
+            <div class="products">
+                <div class="product-card">
+                    <img src="products image/smartphone.webp" alt="Smartphone">
+                    <h3>Latest Smartphone</h3>
+                    <p>$299.99</p>
+                    <button class="add-to-cart" data-product="Smartphone" data-price="299.99">Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="products image/t-shirt.jpg" alt="T-Shirt">
+                    <h3>Stylish T-Shirt</h3>
+                    <p>$19.99</p>
+                    <button class="add-to-cart" data-product="T-Shirt" data-price="19.99">Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="products image/coffee maker.webp" alt="Coffee Maker">
+                    <h3>Premium Coffee Maker</h3>
+                    <p>$89.99</p>
+                    <button class="add-to-cart" data-product="Coffee Maker" data-price="89.99">Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="products image/headphones.webp" alt="Headphones">
+                    <h3>Wireless Headphones</h3>
+                    <p>$59.99</p>
+                    <button class="add-to-cart" data-product="Headphones" data-price="59.99">Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="products image/lamp.avif" alt="Lamp">
+                    <h3>Modern Desk Lamp</h3>
+                    <p>$39.99</p>
+                    <button class="add-to-cart" data-product="Lamp" data-price="39.99">Add to Cart</button>
+                </div>
             </div>
         </div>
     </div>

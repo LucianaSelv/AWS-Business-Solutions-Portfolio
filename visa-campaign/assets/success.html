@@ -324,6 +324,7 @@
        <script>
     <script>
     // Initialize variables
+    window.addEventListener('DOMContentLoaded', () => {
     const shopNowBtn = document.getElementById('shopNowBtn');
     const continueShoppingBtn = document.getElementById('continueShoppingBtn');
     const orderNowBtn = document.getElementById('orderNowBtn');
@@ -332,9 +333,24 @@
     const cartTotal = document.getElementById('cartTotal');
     const successNotification = document.getElementById('successNotification');
     const errorNotification = document.getElementById('errorNotification');
-    
     let kitAdded = false;
-    
+
+    // Debug element references
+    console.log('shopNowBtn:', shopNowBtn);
+    console.log('continueShoppingBtn:', continueShoppingBtn);
+    console.log('orderNowBtn:', orderNowBtn);
+
+    // Token assignment
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const tokenElement = document.getElementById('token');
+    if (tokenElement) {
+        tokenElement.textContent = token || 'Not provided';
+        console.log('Token set to:', token || 'Not provided');
+    } else {
+        console.error('Token element not found');
+    }
+
     // Handle showing notifications
     const showNotification = (element, message = null) => {
         successNotification.style.display = 'none';
@@ -347,7 +363,7 @@
             element.style.display = 'none';
         }, 5000);
     };
-    
+
     // Add Gillette Kit to cart
     const addGilletteKitToCart = () => {
         if (kitAdded) {
@@ -376,53 +392,52 @@
         showNotification(successNotification, '✔️ 1 Gillette Kit has been added to your cart.');
         cartSection.scrollIntoView({ behavior: 'smooth' });
     };
-    
+
     // Event Listeners
-    shopNowBtn.addEventListener('click', () => {
-        addGilletteKitToCart();
-    });
-    
-    continueShoppingBtn.addEventListener('click', () => {
-        document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
-    });
-    
-    orderNowBtn.addEventListener('click', () => {
-        alert('✅ Purchase confirmed! Your Gillette Kit will be delivered soon.');
-    });
-    
-    // Check token and validate on page load
-    window.addEventListener('DOMContentLoaded', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
-        const tokenElement = document.getElementById('token');
-        if (tokenElement) {
-            tokenElement.textContent = token || 'Not provided';
-            console.log('Token set to:', token || 'Not provided');
-        } else {
-            console.error('Token element not found');
-        }
-        if (!token) {
-            showNotification(errorNotification, 'Token is missing. Please check your registration email.');
-            shopNowBtn.disabled = true;
-            return;
-        }
-        fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                showNotification(successNotification, '✔️ Token verified! Click "Shop Now" to claim your exclusive Gillette Kit.');
-            } else {
-                showNotification(errorNotification, '❌ Token invalid or already used: ' + data.error);
-                shopNowBtn.disabled = true;
-            }
-        })
-        .catch(error => {
-            showNotification(errorNotification, 'Error verifying token. Please try again later.');
-            console.error('Error:', error);
+    if (shopNowBtn) {
+        shopNowBtn.addEventListener('click', () => {
+            addGilletteKitToCart();
         });
+    } else {
+        console.error('shopNowBtn element not found');
+    }
+    if (continueShoppingBtn) {
+        continueShoppingBtn.addEventListener('click', () => {
+            document.querySelector('.products').scrollIntoView({ behavior: 'smooth' });
+        });
+    } else {
+        console.error('continueShoppingBtn element not found');
+    }
+    if (orderNowBtn) {
+        orderNowBtn.addEventListener('click', () => {
+            alert('✅ Purchase confirmed! Your Gillette Kit will be delivered soon.');
+        });
+    } else {
+        console.error('orderNowBtn element not found');
+    }
+
+    // Check token and validate on page load
+    if (!token) {
+        showNotification(errorNotification, 'Token is missing. Please check your registration email.');
+        shopNowBtn.disabled = true;
+        return;
+    }
+    fetch('https://ee0f0pta2b.execute-api.eu-west-2.amazonaws.com/v1/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(successNotification, '✔️ Token verified! Click "Shop Now" to claim your exclusive Gillette Kit.');
+        } else {
+            showNotification(errorNotification, '❌ Token invalid or already used: ' + data.error);
+            shopNowBtn.disabled = true;
+        }
+    })
+    .catch(error => {
+        showNotification(errorNotification, 'Error verifying token. Please try again later.');
+        console.error('Error:', error);
     });
-</script>
+});

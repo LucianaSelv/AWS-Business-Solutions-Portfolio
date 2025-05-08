@@ -67,11 +67,16 @@ The architecture integrates multiple AWS services, deployed via AWS CloudFormati
 ### Deployment Method:
 The solution was deployed using AWS CloudFormation, enabling infrastructure-as-code for consistency and scalability. The deployment leverages the AWS Free Tier to minimise costs and adheres to the AWS Well-Architected Framework for security, reliability, and operational excellence.
 
+## 🔐 Security Considerations
+- IAM Roles follow least privilege
+- S3 buckets are **server-side encrypted**
+- API access requires **JWT via Cognito**
+- Sensitive events logged via **CloudTrail**
+
 ## 📺 **Walkthrough Video**
 
 
 ## 📊 Results & Business Impact
-
 - Faster processing of customs clearance and documents.
 - Fewer human errors in deferred account assignments.
 - Higher team productivity due to automation.
@@ -80,6 +85,9 @@ The solution was deployed using AWS CloudFormation, enabling infrastructure-as-c
 ## 💡 Cost Optimization
 - Fully serverless: No EC2 management.
 - Maximum AWS Free Tier usage during early deployment.
+
+### 📌 Status: Demo-Only, Not Production
+This is a mock project for demonstration only.
 
 ![AWS](https://img.shields.io/badge/AWS-Free%20Tier-orange)
 ![Serverless](https://img.shields.io/badge/Architecture-Serverless-brightgreen)

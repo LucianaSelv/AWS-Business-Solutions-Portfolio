@@ -68,7 +68,7 @@ The Visa campaign architecture integrates multiple AWS services inside a secure 
 ![Architecture Diagram](architecture/VISA_campaign_architecture_layers..svg)
 
 ## 🛠 **Deployment Method**
-The solution was deployed using AWS CloudFormation (IaC), with the frontend hosted on an S3 bucket with static website hosting, served via CloudFront for global caching, leveraging the AWS Free Tier to minimise costs. The backend uses Lambda functions via API Gateway, with DynamoDB for storage, Cognito User Pools for authentication, AWS WAF at CloudFront to filter web attacks, and Amazon Pinpoint for targeted email campaigns, adhering to the AWS Well-Architected Framework for security, reliability, and operational excellence.
+The solution was partially deployed using AWS CloudFormation (IaC), with the frontend hosted on an S3 bucket with static website hosting, served via CloudFront for global caching, leveraging the AWS Free Tier to minimise costs. The backend uses Lambda functions via API Gateway, with DynamoDB for storage, Cognito User Pools for authentication, AWS WAF at CloudFront to filter web attacks, and Amazon Pinpoint for targeted email campaigns, adhering to the AWS Well-Architected Framework for security, reliability, and operational excellence.
 
 ### User Journey:
 
@@ -79,7 +79,7 @@ The solution was deployed using AWS CloudFormation (IaC), with the frontend host
 - S3 buckets are **server-side encrypted**
 - API access requires **JWT via Cognito**
 - Customer Data secured by **Pinpoint with TLS 1.2+ for data in transit**
-- Web Security to block SQL injection and XSS via **WAF**
+- Web Security to block **SQL injection and XSS via WAF**
 - Monitoring via **CloudWatch**
   
 ## 📈 Business Impact

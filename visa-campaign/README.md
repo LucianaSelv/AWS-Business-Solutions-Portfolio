@@ -11,7 +11,7 @@ It reimagines a real-world case where a high-profile campaign required a **fraud
 
 ### Before Implementation:
 - **Traffic spike vulnerability** due to leaked pre-campaign, risking service disruption.
-- **Fraud risk** with uncontrolled purchasing (multiple units per person).
+- **Fraud risk** with uncontrolled purchasing (multiple promotional units per person).
 - **Absence** of strong identity verification mechanisms (users could register multiple times with different emails).
 - **Partner reputation at stake** for legal, financial, and brand reputation risks.
 - **Need for scalable, secure architecture** under high demand.
@@ -24,7 +24,7 @@ It reimagines a real-world case where a high-profile campaign required a **fraud
 ### Proposed and implemented Solutions:
  - Validate signups with CPF as a unique user identifier.
  - Securely collect sensitive user data (name, email, CPF, card) with account authentication.
- - Enforce a 1-unit-per-customer limit.
+ - Enforce a 1-unit-per-customer limit for the promotional item.
  - Handle unexpected traffic via scalable serverless services.
  - Monitor metrics and engage customers post-signup.
 

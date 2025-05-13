@@ -72,7 +72,9 @@ The solution was partially deployed using AWS CloudFormation (IaC), with the fro
 
 ### 👤 User Journey:
 ![Use Journey diagram](architecture/Visa_campaign_user_journey.drawio.svg)
+
 ## 📺 **Walkthrough Video**
+[Watch the AWS Visa Campaign Solution Walkthrough on YouTube](https://youtu.be/LtA44fSpVEE)
 
 ## 🔐 Security Considerations
 - IAM Roles follow least privilege

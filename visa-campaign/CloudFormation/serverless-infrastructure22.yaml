@@ -1,0 +1,296 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  # S3 Bucket for static content
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub visa-campaign-${AWS::AccountId}-${AWS::Region}
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, POST]
+            AllowedOrigins: ['*']
+            MaxAge: 3000
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      Tags:
+        - Key: Project
+          Value: VisaCampaign
+        - Key: Environment
+          Value: Demo
+        - Key: Owner
+          Value: your-name
+        - Key: Purpose
+          Value: PortfolioDemo
+
+  # S3 Bucket Policy for public read access
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DependsOn: WebsiteBucket
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action: 's3:GetObject'
+            Effect: Allow
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref WebsiteBucket, '/*']]
+            Principal: '*'
+
+  # Rest of the template continues here...
+  # DynamoDB Tables
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: CampaignUsers
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: cpf
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: CpfIndex
+          KeySchema:
+            - AttributeName: cpf
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: VisaCampaign
+        - Key: Environment
+          Value: Demo
+        - Key: Owner
+          Value: your-name
+        - Key: Purpose
+          Value: PortfolioDemo
+
+  TokenTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: CampaignTokens
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: token
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: token
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: UserIdIndex
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      TimeToLiveSpecification:
+        AttributeName: expiration
+        Enabled: true
+      Tags:
+        - Key: Project
+          Value: VisaCampaign
+        - Key: Environment
+          Value: Demo
+        - Key: Owner
+          Value: your-name
+        - Key: Purpose
+          Value: PortfolioDemo
+
+  # IAM Role for Lambda
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: DynamoDBAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'dynamodb:PutItem'
+                  - 'dynamodb:GetItem'
+                  - 'dynamodb:UpdateItem'
+                  - 'dynamodb:DeleteItem'
+                  - 'dynamodb:Query'
+                  - 'dynamodb:Scan'
+                Resource:
+                  - !GetAtt UserTable.Arn
+                  - !GetAtt TokenTable.Arn
+                  - !Join ['', [!GetAtt UserTable.Arn, '/index/*']]
+                  - !Join ['', [!GetAtt TokenTable.Arn, '/index/*']]
+
+  # Lambda Functions
+  LoginLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: CampaignUserLogin
+      Runtime: nodejs22.x
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Handler: index.handler
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            const body = JSON.parse(event.body || '{}');
+            const { email, cpf } = body;
+            if (email && cpf) {
+              return {
+                statusCode: 200,
+                body: JSON.stringify({ token: "mock-jwt-token", user: { email, cpf } }),
+              };
+            }
+            return {
+              statusCode: 400,
+              body: JSON.stringify({ error: "Missing fields" }),
+            };
+          };
+      Tags:
+        - Key: Project
+          Value: VisaCampaign
+        - Key: Environment
+          Value: Demo
+        - Key: Owner
+          Value: your-name
+        - Key: Purpose
+          Value: PortfolioDemo
+
+  SendCampaignLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: SendCampaignMessage
+      Runtime: nodejs22.x
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Handler: index.handler
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            const body = JSON.parse(event.body || '{}');
+            const { email, message } = body;
+            console.log(`Simulated sending message: "${message}" to ${email}`);
+            return {
+              statusCode: 200,
+              body: JSON.stringify({ status: "Message logged", email }),
+            };
+          };
+      Tags:
+        - Key: Project
+          Value: VisaCampaign
+        - Key: Environment
+          Value: Demo
+        - Key: Owner
+          Value: your-name
+        - Key: Purpose
+          Value: PortfolioDemo
+
+  # API Gateway (HTTP API)
+  CampaignApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: CampaignApi
+      ProtocolType: HTTP
+      Tags:
+        Project: VisaCampaign
+        Environment: Demo
+        Owner: your-name
+        Purpose: PortfolioDemo
+
+  LoginIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref CampaignApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LoginLambda.Arn}/invocations
+      PayloadFormatVersion: "2.0"
+
+  CampaignIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref CampaignApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SendCampaignLambda.Arn}/invocations
+      PayloadFormatVersion: "2.0"
+
+  LoginRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref CampaignApi
+      RouteKey: POST /login
+      Target: !Join ["/", ["integrations", !Ref LoginIntegration]]
+
+  CampaignRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref CampaignApi
+      RouteKey: POST /send-campaign
+      Target: !Join ["/", ["integrations", !Ref CampaignIntegration]]
+
+  Deployment:
+    Type: AWS::ApiGatewayV2::Deployment
+    DependsOn:
+      - LoginRoute
+      - CampaignRoute
+    Properties:
+      ApiId: !Ref CampaignApi
+
+  Stage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref CampaignApi
+      StageName: v1
+      DeploymentId: !Ref Deployment
+
+  # Lambda Permissions
+  LoginLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref LoginLambda
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${CampaignApi}/*/*/login
+
+  CampaignLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref SendCampaignLambda
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${CampaignApi}/*/*/send-campaign
+
+Outputs:
+  WebsiteBucketName:
+    Description: S3 Bucket Name for Website
+    Value: !Ref WebsiteBucket
+    Export:
+      Name: !Sub "${AWS::StackName}-WebsiteBucketName"
+
+  WebsiteBucketURL:
+    Description: URL for S3 Website
+    Value: !GetAtt WebsiteBucket.WebsiteURL
+    Export:
+      Name: !Sub "${AWS::StackName}-WebsiteURL"
+
+  LambdaExecutionRoleARN:
+    Description: ARN for Lambda Execution Role
+    Value: !GetAtt LambdaExecutionRole.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-LambdaRoleARN"

@@ -73,9 +73,6 @@ The solution was deployed using AWS CloudFormation, enabling infrastructure-as-c
 - API access requires **JWT via Cognito**
 - Sensitive events logged via **CloudTrail**
 
-## 📺 **Walkthrough Video**
-
-
 ## 📊 Results & Business Impact
 - Faster processing of customs clearance and documents.
 - Fewer human errors in deferred account assignments.
